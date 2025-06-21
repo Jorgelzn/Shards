@@ -2,30 +2,27 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "shell",
-            "label": "C/C++: g++.exe build active file",
-            "command": "C:\\bin\\msys64\\ucrt64\\bin\\g++.exe",
-            "args": [
-                "-g",
-                "-std=c++17",
-    		    "-I${workspaceFolder}/include",
-		        "-L${workspaceFolder}/lib",				
-		        "${workspaceFolder}/src/\\*.cpp",				
-		        "${workspaceFolder}/src/glad.c",
-                "-lglfw3dll",
-                "-o",
-                "${workspaceFolder}/myprogram.exe"
+            "type": "cmake",
+            "label": "CMake: build",
+            "command": "build",
+            "targets": [
+                "C:/bin/msys64/ucrt64/bin/gcc.exe",
+                "C:/bin/msys64/ucrt64/bin/g++.exe"
             ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake template build task"
+        },
+        {
+            "type": "cmake",
+            "label": "CMake: clean rebuild",
+            "command": "cleanRebuild",
+            "targets": [
+                "all"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake template clean rebuild task"
         }
     ]
 }
