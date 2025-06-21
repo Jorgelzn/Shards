@@ -18,3 +18,5 @@ add_executable(myprogram ${SOURCES})
 
 # Add include directory
 target_include_directories(myprogram PRIVATE "${CMAKE_SOURCE_DIR}/include")
+
+target_link_libraries(myprogram ${CMAKE_SOURCE_DIR}/lib/libglfw3.a)
