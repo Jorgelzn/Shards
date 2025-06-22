@@ -230,6 +230,7 @@ int main()
     glDeleteVertexArrays(1, &triangleVAO);
     glDeleteBuffers(1, &triangleVBO);
     glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaderProgramGreen);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
