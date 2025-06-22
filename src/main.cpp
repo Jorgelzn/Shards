@@ -22,6 +22,12 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "{\n"
     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n\0";
+const char *fragmentShaderSourceGreen = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "   FragColor = vec4(0.0f, 0.8f, 0.5f, 1.0f);\n"
+    "}\n\0";
 
 int main()
 {
@@ -83,7 +89,18 @@ int main()
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    // link shaders
+    // fragment shader green
+    unsigned int fragmentShaderGreen = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShaderGreen, 1, &fragmentShaderSourceGreen, NULL);
+    glCompileShader(fragmentShaderGreen);
+    // check for shader compile errors
+    glGetShaderiv(fragmentShaderGreen, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShaderGreen, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    // shader program
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -94,8 +111,21 @@ int main()
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
+    // shader program green
+    unsigned int shaderProgramGreen = glCreateProgram();
+    glAttachShader(shaderProgramGreen, vertexShader);
+    glAttachShader(shaderProgramGreen, fragmentShaderGreen);
+    glLinkProgram(shaderProgramGreen);
+    // check for linking errors
+    glGetProgramiv(shaderProgramGreen, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgramGreen, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }
+
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    glDeleteShader(fragmentShaderGreen);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -180,7 +210,8 @@ int main()
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0); 
+        glBindVertexArray(0);
+        glUseProgram(shaderProgramGreen);
         glBindVertexArray(triangleVAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
